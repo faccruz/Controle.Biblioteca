@@ -33,7 +33,7 @@ namespace Controle.Biblioteca.Service
             if (livro != null && usuario != null)
             {
                 livro.Emprestar();
-                _historico.Add($"{usuario.Nome} empretou o livro '{livro.Titulo}'");                
+                _historico.Add($"{DateTime.Now}: {usuario.Nome} empretou o livro '{livro.Titulo}'");                
             }
         }
 
