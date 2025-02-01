@@ -12,6 +12,24 @@ namespace Controle.Biblioteca.Service
             _livros.Add(livro);
         }
 
+        public void ListarLivrosDisponiveis()
+        {
+            var disponivel = _livros.Where(l => l.Disponivel).ToList();
+
+            if (disponivel.Count == 0)
+            {
+                Console.WriteLine("Nenhum livro disponível para empréstimo.");
+            }
+            else
+            {
+                Console.WriteLine("Livros disponiveis:");
+                foreach (var item in disponivel)
+                {
+                    Console.WriteLine($"{item.Titulo} - {item.Autor} - {item.ISBN}");
+                }
+            }
+        }
+
         public void ListarLivroDisponivel()
         {
             foreach (var item in _livros.Where(x => x.Disponivel) )

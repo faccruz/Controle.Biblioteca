@@ -1,6 +1,8 @@
-﻿namespace Controle.Biblioteca.Domain
+﻿using Controle.Biblioteca.Interface;
+
+namespace Controle.Biblioteca.Domain
 {
-    public class Usuario
+    public class Usuario : INotificacaoObserver
     {
         public string Nome { get; }
         public int ID { get; }
@@ -10,6 +12,11 @@
         {
             Nome = nome;
             ID = contador++;
+        }
+
+        public void Notificar(string mensagem)
+        {
+            Console.WriteLine($"Notificação para {Nome}: {mensagem}");
         }
     }
 }

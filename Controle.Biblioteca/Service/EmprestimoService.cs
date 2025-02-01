@@ -6,14 +6,15 @@ namespace Controle.Biblioteca.Service
     public class EmprestimoService : IEmprestimoService
     {
         private readonly List<String> _historico = new();
-        private readonly List<INotificationService> _notificationsService = new();
+        private readonly INotificacaoService _notificacaoService;
         private readonly ILivroService _livroService;
         private readonly IUsuarioService _usuarioService;
 
-        public EmprestimoService(ILivroService livroService, IUsuarioService usuarioService)
+        public EmprestimoService(ILivroService livroService, IUsuarioService usuarioService, INotificacaoService notificacaoService )
         {
             _livroService = livroService;
             _usuarioService = usuarioService;
+            _notificacaoService = notificacaoService;
         }
 
         public void DevolverLivro(string isbn)
@@ -22,6 +23,7 @@ namespace Controle.Biblioteca.Service
             if (livro != null) 
             {
                 livro.Devolver();
+                _notificacaoService.NotificarObservadores($"Livro '{livro.Titulo}' foi devolvido.");
             }
         }
 
@@ -33,7 +35,8 @@ namespace Controle.Biblioteca.Service
             if (livro != null && usuario != null)
             {
                 livro.Emprestar();
-                _historico.Add($"{DateTime.Now}: {usuario.Nome} empretou o livro '{livro.Titulo}'");                
+                _historico.Add($"{DateTime.Now}: {usuario.Nome} empretou o livro '{livro.Titulo}'");
+                _notificacaoService.NotificarObservadores($"{usuario.Nome} emprestou '{livro.Titulo}'");
             }
         }
 
@@ -42,19 +45,6 @@ namespace Controle.Biblioteca.Service
             foreach (var item in _historico)            
             {
                 Console.WriteLine(item);
-            }
-        }
-
-        public void AdicionarObservador(INotificationService notificationService)
-        {
-            _notificationsService.Add(notificationService);
-        }
-
-        private void Notificacao(string msg) 
-        {
-            foreach(var item in _notificationsService)
-            {
-                item.Notificar(msg);
             }
         }
     }

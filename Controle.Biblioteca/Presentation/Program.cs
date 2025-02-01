@@ -1,5 +1,5 @@
 ﻿using Controle.Biblioteca.Domain;
-using Controle.Biblioteca.Observer;
+using Controle.Biblioteca.Interface;
 using Controle.Biblioteca.Service;
 
 class Program
@@ -8,22 +8,24 @@ class Program
     {
         var livroService = new LivroService();
         var usuarioService = new UsuarioService();
-        var emprestimoService = new EmprestimoService(livroService, usuarioService);
+        var notificacaoService = usuarioService;
+        var emprestimoService = new EmprestimoService(livroService, usuarioService, notificacaoService);
 
         while (true) 
         {
             Console.WriteLine("\nMenu Principal");
             Console.WriteLine("1. Adicionar usuário");
             Console.WriteLine("2. Adicionar Livro");
-            Console.WriteLine("3. Emprestar Livro");
-            Console.WriteLine("4. Devolver Livro");
-            Console.WriteLine("5. Histórico do Livro");
-            Console.WriteLine("6. Sair");
+            Console.WriteLine("3. Listar livros disponíveis");
+            Console.WriteLine("4. Emprestar Livro");
+            Console.WriteLine("5. Devolver Livro");
+            Console.WriteLine("6. Histórico do Livro");
+            Console.WriteLine("7. Sair");
             Console.WriteLine("Escolha uma opção: ");
 
             var opcao = Console.ReadLine();
 
-            switch (opcao) 
+            switch (opcao)
             {
                 case "1":
                     Console.WriteLine("Nome do usuário: ");
@@ -39,20 +41,23 @@ class Program
                     livroService.AdicionarLivro(new Livro(titulo, autor, isbn));
                     break;
                 case "3":
+                    livroService.ListarLivrosDisponiveis();
+                    break;
+                case "4":
                     Console.WriteLine("ISBN do Livro: ");
                     string isbnEmprestimo = Console.ReadLine();
                     Console.WriteLine("ID do usuário: ");
                     int userId = int.Parse(Console.ReadLine());
                     emprestimoService.EmprestarLivro(isbnEmprestimo, userId);
                     break;
-                case "4":
+                case "5":
                     Console.WriteLine("ISBN do livro: ");
                     emprestimoService.DevolverLivro(Console.ReadLine());
                     break;
-                case "5":
+                case "6":
                     emprestimoService.MostrarHistorico();
                     break;
-                case "6":
+                case "7":
                     return;
                 default:
                     Console.WriteLine("Opção inválida!");
